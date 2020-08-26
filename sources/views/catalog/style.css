@@ -1,0 +1,31 @@
+.catalog_list img {
+	max-width: 100%;
+	max-height: 100%;
+	vertical-align: middle;
+}
+
+.catalog_list .counter_overall {
+	padding: 3px 2px;
+	height: 32px;
+	margin-top: 3px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.catalog_list .button_overall button {
+	padding: 6px 10px;
+}
+
+.info_window table tr th {
+	text-align: left;
+	vertical-align: top;
+}
+
+.info_window .info_img {
+	text-align: center;
+}
+
+.info_window .info_img img {
+	max-height: 100%;
+	max-width: 100%;
+}

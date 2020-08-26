@@ -1,0 +1,110 @@
+import {JetView} from "webix-jet";
+import {data} from "../../models/category";
+import {catalogData} from "../../models/catalog";
+
+export default class NewProduct extends JetView {
+	config() {
+		const ui = {
+			view: "form",
+			elements: [
+				{
+					view: "combo",
+					placeholder: "Model",
+					label: "Model<super>*</super>",
+					name: "modelId",
+					options: data[0]
+				},
+				{
+					view: "text",
+					placeholder: "Type name",
+					name: "title",
+					label: "Name<super>*</super>"
+				},
+				{
+					view: "text",
+					placeholder: "Type price",
+					name: "price",
+					label: "Price<super>*</super>"
+				},
+				{
+					cols: [
+						{
+							view: "label",
+							label: "Picture:",
+							width: 81
+						},
+						{
+							view: "text",
+							name: "img",
+							disabled: true,
+							hidden: true
+						},
+						{
+							view: "uploader",
+							value: "Add picture",
+							autosend: false,
+							multiple: false,
+							height: 24,
+							autowidth: true,
+							css: "webix_primary",
+							accept: "image/jpeg, image/png",
+							on: {
+								onBeforeFileAdd(upload) {
+									const file = upload.file;
+									const reader = new FileReader();
+									reader.onload = (event) => {
+										const form = this.getFormView();
+										const textInput = form.elements.img;
+										textInput.setValue(event.target.result);
+									};
+									reader.readAsDataURL(file);
+									return false;
+								}
+							}
+						},
+						{}
+					]
+				},
+				{
+					view: "textarea",
+					height: 55
+				},
+				{
+					cols: [
+						{
+							view: "button",
+							value: "Add new product",
+							autowidth: true,
+							css: "webix_primary",
+							on: {
+								onItemClick() {
+									const form = this.getFormView();
+									if (form.validate()) {
+										const formData = form.getValues();
+										catalogData.add({
+											img: formData.img,
+											title: formData.title,
+											model: data[0].data.find(item => +item.id === +formData.modelId).model,
+											category: data[0].category,
+											price: formData.price,
+											rating: "0"
+										});
+									}
+								}
+							}
+						},
+						{}
+					]
+				},
+				{}
+			],
+			rules: {
+				modelId: webix.rules.isNotEmpty,
+				title: webix.rules.isNotEmpty,
+				price: webix.rules.isNumber
+			}
+		};
+
+		return ui;
+	}
+}
