@@ -1,3 +1,4 @@
+import * as crypto from "crypto-js";
 import {JetView} from "webix-jet";
 import {users} from "../../models/users";
 
@@ -14,9 +15,11 @@ export default class Register extends JetView {
 				{
 					padding: 11,
 					rows: [
-						{view: "text", name: "name", label: "Name", labelWidth: 130},
-						{view: "text", name: "email", label: "E-Mail Address", labelWidth: 130},
-						{view: "text", type: "password", name: "pass", label: "Password", labelWidth: 130},
+						{view: "text", name: "name", label: "Name<super>*</super>", labelWidth: 130},
+						{view: "text", name: "email", label: "E-Mail Address<super>*</super>", labelWidth: 130},
+						{view: "text", name: "phone", label: "Phone Number", labelWidth: 130},
+						{view: "text", name: "address", label: "Address", labelWidth: 130},
+						{view: "text", type: "password", name: "pass", label: "Password<super>*</super>", labelWidth: 130},
 						{view: "text", localId: "confirmPass", type: "password", label: "Confirm Password", labelWidth: 130},
 						{cols: [
 							{width: 131},
@@ -50,7 +53,8 @@ export default class Register extends JetView {
 		if (form.validate()) {
 			const data = form.getValues();
 			if (this.$$("confirmPass").getValue() === data.pass) {
-				users.add({...data}, 0);
+				data.pass = crypto.SHA256(data.pass).toString();
+				users.add({...data, admin: false}, 0);
 				this.app.show("/auth.index/auth.login");
 			}
 		}

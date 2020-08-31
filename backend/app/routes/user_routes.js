@@ -54,7 +54,7 @@ module.exports = function(app, db) {
 				console.log(err);
 				res.status(500).send({status: "error"});
 			} else {
-				res.send('User ' + id + ' deleted!');
+				res.send(item);
 			} 
 		});
 	});

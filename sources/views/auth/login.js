@@ -1,3 +1,4 @@
+import * as crypto from "crypto-js";
 import {JetView} from "webix-jet";
 import {users} from "../../models/users";
 
@@ -55,7 +56,7 @@ export default class Login extends JetView {
 		if (form.validate()) {
 			const formValues = form.getValues();
 			// eslint-disable-next-line max-len
-			const auth = users.find(obj => obj.email.indexOf(formValues.email) !== -1 && obj.pass.indexOf(formValues.pass) !== -1);
+			const auth = users.find(obj => obj.email.indexOf(formValues.email) !== -1 && obj.pass.indexOf(crypto.SHA256(formValues.pass).toString()) !== -1);
 			if (auth.length > 0) {
 				this.app.setService("user", {auth: true, user: auth[0]});
 				this.app.show("/top/catalog");
