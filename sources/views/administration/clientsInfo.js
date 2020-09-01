@@ -12,7 +12,7 @@ export default class ClientInfo extends JetView {
 				{header: ["Name", {content: "textFilter"}], id: "name", fillspace: true, editor: "text"},
 				{header: ["Email", {content: "textFilter"}], fillspace: true, id: "email", editor: "text"},
 				{header: "Created at", id: "createdDate"},
-				{header: "Is admin", id: "admin", checkValue: true, uncheckValue: false, template: "{common.checkbox()}"}
+				{header: "Is admin", id: "admin", checkValue: "true", uncheckValue: "false", template: "{common.checkbox()}"}
 			],
 			rules: {
 				name: webix.rules.isNotEmpty,

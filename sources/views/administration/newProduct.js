@@ -1,5 +1,5 @@
 import {JetView} from "webix-jet";
-import {data} from "../../models/category";
+import categoryData from "../../models/category";
 import {catalogData} from "../../models/catalog";
 
 export default class NewProduct extends JetView {
@@ -11,8 +11,7 @@ export default class NewProduct extends JetView {
 					view: "combo",
 					placeholder: "Model",
 					label: "Model<super>*</super>",
-					name: "modelId",
-					options: data[0]
+					name: "modelId"
 				},
 				{
 					view: "text",
@@ -74,24 +73,9 @@ export default class NewProduct extends JetView {
 						{
 							view: "button",
 							value: "Add new product",
+							localId: "addNewProduct",
 							autowidth: true,
-							css: "webix_primary",
-							on: {
-								onItemClick() {
-									const form = this.getFormView();
-									if (form.validate()) {
-										const formData = form.getValues();
-										catalogData.add({
-											img: formData.img,
-											title: formData.title,
-											model: data[0].data.find(item => +item.id === +formData.modelId).model,
-											category: data[0].category,
-											price: formData.price,
-											rating: "0"
-										});
-									}
-								}
-							}
+							css: "webix_primary"
 						},
 						{}
 					]
@@ -106,5 +90,32 @@ export default class NewProduct extends JetView {
 		};
 
 		return ui;
+	}
+
+	init(view) {
+		const addNewProduct = this.$$("addNewProduct");
+		const form = view;
+		const models = form.elements.modelId;
+		categoryData.waitData.then(() => {
+			models.define({
+				options: categoryData.getItem(categoryData.getFirstId()).models
+			});
+			models.refresh();
+
+			addNewProduct.attachEvent("onItemClick", () => {
+				if (form.validate()) {
+					const formData = form.getValues();
+					const selectedModel = models.getList().getSelectedItem();
+					catalogData.add({
+						img: formData.img,
+						title: formData.title,
+						model: selectedModel.model,
+						category: categoryData.getItem(categoryData.getFirstId()).category,
+						price: formData.price,
+						rating: "0"
+					});
+				}
+			});
+		});
 	}
 }

@@ -1,5 +1,5 @@
 import {JetView} from "webix-jet";
-import {data} from "../models/category";
+import categoryData from "../models/category";
 import {bagData} from "../models/bag";
 import Toolbar from "./toolbar";
 
@@ -12,7 +12,7 @@ export default class TopView extends JetView {
 			width: 180,
 			layout: "y",
 			select: true,
-			data
+			data: categoryData
 		};
 
 		const ui = {

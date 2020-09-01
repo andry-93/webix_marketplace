@@ -1,6 +1,12 @@
 export const users = new webix.DataCollection({
 	url: "http://localhost:3000/users",
-	save: "http://localhost:3000/users"
+	save: {
+		insert: "http://localhost:3000/users",
+		update(id, status, item) {
+			return webix.ajax().put(`http://localhost:3000/users/${item._id}`, item);
+		},
+		delete: "http://localhost:3000/users"
+	}
 	// data: [
 	// 	{
 	// 		id: 1,
