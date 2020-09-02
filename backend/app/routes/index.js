@@ -1,8 +1,9 @@
 const userRoutes = require('./user_routes');
 const categoryRoutes = require('./category_routes');
+const catalogRoutes = require('./catalog_routes');
 
 module.exports = function(app, db) {
 	userRoutes(app, db);
 	categoryRoutes(app, db);
-	// Тут, позже, будут и другие обработчики маршрутов 
+	catalogRoutes(app, db);
 };

@@ -107,6 +107,7 @@ export default class NewProduct extends JetView {
 					const formData = form.getValues();
 					const selectedModel = models.getList().getSelectedItem();
 					catalogData.add({
+						id: webix.uid(),
 						img: formData.img,
 						title: formData.title,
 						model: selectedModel.model,
