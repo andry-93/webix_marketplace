@@ -28,6 +28,7 @@ module.exports = function(app, db) {
 
 	app.post('/users', (req, res) => {
 		const user = {
+			id: req.body.id,
 			name: req.body.name,
 			email: req.body.email,
 			phone: req.body.phone,
@@ -46,23 +47,24 @@ module.exports = function(app, db) {
 		});
 	});
 
-	app.delete('/users/:id', (req, res) => {
-		const id = req.params.id;
-		const details = { '_id': new ObjectID(id) };
-		db.collection('users').deleteOne(details, (err, item) => {
-			if (err) {
-				console.log(err);
-				res.status(500).send({status: "error"});
-			} else {
-				res.status(200).send(item);
-			} 
-		});
-	});
+	// app.delete('/users/:id', (req, res) => {
+	// 	const id = req.params.id;
+	// 	const details = { '_id': new ObjectID(id) };
+	// 	db.collection('users').deleteOne(details, (err, item) => {
+	// 		if (err) {
+	// 			console.log(err);
+	// 			res.status(500).send({status: "error"});
+	// 		} else {
+	// 			res.status(200).send(item);
+	// 		} 
+	// 	});
+	// });
 
 	app.put ('/users/:id', (req, res) => {
 		const id = req.params.id;
 		const details = { '_id': new ObjectID(id) };
 		const user = {
+			id: req.body.id,
 			name: req.body.name,
 			email: req.body.email,
 			phone: req.body.phone,
