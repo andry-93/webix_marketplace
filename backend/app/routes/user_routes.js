@@ -8,7 +8,7 @@ module.exports = function(app, db) {
 					console.log(err);
 					res.status(500).send({status: "error"});
 				} else {
-					res.send(items);
+					res.status(200).send(items);
 				}
 			});
 	});
@@ -21,13 +21,14 @@ module.exports = function(app, db) {
 				console.log(err);
 				res.status(500).send({status: "error"});
 			} else {
-				res.send(item);
+				res.status(200).send(item);
 			}
 		});
 	});
 
 	app.post('/users', (req, res) => {
 		const user = {
+			id: req.body.id,
 			name: req.body.name,
 			email: req.body.email,
 			phone: req.body.phone,
@@ -41,28 +42,29 @@ module.exports = function(app, db) {
 				console.log(err);
 				res.status(500).send({status: "error"});
 			} else {
-				res.send(result.ops[0]);
+				res.status(200).send(result.ops[0]);
 			}
 		});
 	});
 
-	app.delete('/users/:id', (req, res) => {
-		const id = req.params.id;
-		const details = { '_id': new ObjectID(id) };
-		db.collection('users').remove(details, (err, item) => {
-			if (err) {
-				console.log(err);
-				res.status(500).send({status: "error"});
-			} else {
-				res.send(item);
-			} 
-		});
-	});
+	// app.delete('/users/:id', (req, res) => {
+	// 	const id = req.params.id;
+	// 	const details = { '_id': new ObjectID(id) };
+	// 	db.collection('users').deleteOne(details, (err, item) => {
+	// 		if (err) {
+	// 			console.log(err);
+	// 			res.status(500).send({status: "error"});
+	// 		} else {
+	// 			res.status(200).send(item);
+	// 		} 
+	// 	});
+	// });
 
 	app.put ('/users/:id', (req, res) => {
 		const id = req.params.id;
 		const details = { '_id': new ObjectID(id) };
 		const user = {
+			id: req.body.id,
 			name: req.body.name,
 			email: req.body.email,
 			phone: req.body.phone,
@@ -70,12 +72,12 @@ module.exports = function(app, db) {
 			address: req.body.address,
 			admin: req.body.admin
 		};
-		db.collection('users').update(details, user, (err, result) => {
+		db.collection('users').updateOne(details, {$set: user}, (err, result) => {
 			if (err) {
 				console.log(err);
 				res.status(500).send({status: "error"});
 			} else {
-				res.send(user);
+				res.status(200).send(user);
 			} 
 		});
 	});

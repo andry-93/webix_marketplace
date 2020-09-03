@@ -1,5 +1,6 @@
 import {JetView} from "webix-jet";
 import {bagData} from "../models/bag";
+import {users} from "../models/users";
 
 function setValue(button, value) {
 	button.define("label", value);
@@ -54,16 +55,21 @@ export default class Toolbar extends JetView {
 	}
 
 	init() {
-		const auth = this.app.getService("user");
 		const nameLabel = this.$$("userName");
 		const bagButton = this.$$("bagButton");
-		setValue(nameLabel, `Hi, ${auth && auth.user && auth.user.name ? auth.user.name : "Name"}!`);
+
+		users.waitData.then(() => {
+			const auth = this.app.getService("user");
+			setValue(nameLabel, `Hi, ${auth && auth.user && auth.user.name ? auth.user.name : "Name"}!`);
+		});
+
 		bagData.attachEvent("onAfterAdd", () => setValue(bagButton, `Bag(${bagData.count()})`));
 		bagData.attachEvent("onDataUpdate", () => setValue(bagButton, `Bag(${bagData.count()})`));
 		bagData.attachEvent("onAfterDelete", () => setValue(bagButton, `Bag(${bagData.count()})`));
 		bagData.waitData.then(() => {
 			setValue(bagButton, `Bag(${bagData.count()})`);
 		});
+
 		this.$$("bagButton").attachEvent("onItemClick", () => {
 			this.show("bag.index");
 			this._parent.getMenu().unselectAll();
