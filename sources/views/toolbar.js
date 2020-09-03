@@ -39,7 +39,24 @@ export default class Toolbar extends JetView {
 						},
 						{
 							view: "button",
-							value: "History"
+							localId: "adminButton",
+							value: "Admin panel",
+							autowidth: true,
+							hidden: true,
+							on: {
+								onItemClick() {
+									this.$scope.show("administration");
+								}
+							}
+						},
+						{
+							view: "button",
+							value: "History",
+							on: {
+								onItemClick() {
+									this.$scope.show("orderHistory");
+								}
+							}
 						},
 						{
 							view: "button",
@@ -57,9 +74,16 @@ export default class Toolbar extends JetView {
 	init() {
 		const nameLabel = this.$$("userName");
 		const bagButton = this.$$("bagButton");
+		const adminButton = this.$$("adminButton");
 
 		users.waitData.then(() => {
 			const auth = this.app.getService("user");
+			if (auth && auth.user && auth.user.name) {
+				adminButton.show();
+			}
+			else {
+				adminButton.hide();
+			}
 			setValue(nameLabel, `Hi, ${auth && auth.user && auth.user.name ? auth.user.name : "Name"}!`);
 		});
 
