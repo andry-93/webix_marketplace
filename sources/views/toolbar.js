@@ -78,7 +78,7 @@ export default class Toolbar extends JetView {
 
 		users.waitData.then(() => {
 			const auth = this.app.getService("user");
-			if (auth && auth.user && auth.user.name) {
+			if (auth && auth.user && auth.user.admin === "true") {
 				adminButton.show();
 			}
 			else {
