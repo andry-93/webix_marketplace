@@ -1,6 +1,7 @@
 import {JetView} from "webix-jet";
 import {bagData} from "../../models/bag";
 import {ordersData} from "../../models/orders";
+import {users} from "../../models/users";
 
 import "./style.css";
 
@@ -97,13 +98,15 @@ export default class OrderForm extends JetView {
 	}
 
 	init() {
-		const auth = this.app.getService("user");
-		const orderForm = this.$$("orderForm");
-		orderForm.setValues({
-			name: auth.user.name,
-			email: auth.user.email,
-			phone: auth.user.phone,
-			address: auth.user.address
+		users.waitData.then(() => {
+			const auth = this.app.getService("user");
+			const orderForm = this.$$("orderForm");
+			orderForm.setValues({
+				name: auth.user.name,
+				email: auth.user.email,
+				phone: auth.user.phone,
+				address: auth.user.address
+			});
 		});
 	}
 }
