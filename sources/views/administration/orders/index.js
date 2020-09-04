@@ -20,8 +20,10 @@ export default class Orders extends JetView {
 	config() {
 		return {
 			view: "datatable",
+			localId: "historyTable",
 			columns: [
 				{
+					id: "productName",
 					header: [
 						"Product",
 						{
@@ -29,8 +31,7 @@ export default class Orders extends JetView {
 							compare: onTitleFilter
 						}
 					],
-					adjust: true,
-					template: obj => catalogData.getItem(obj.productId).title
+					adjust: true
 				},
 				{header: "Amount", id: "amount", width: 70},
 				{header: ["Buyer name", {content: "textFilter"}], fillspace: true, id: "name", minWidth: 102, maxWidth: 250},
@@ -47,13 +48,15 @@ export default class Orders extends JetView {
 					this.$scope.statusWindow.showWindow(cell.row);
 					return false;
 				}
-			},
-			data: ordersData
+			}
 		};
 	}
 
 	init() {
 		this.statusWindow = this.ui(StatusWindow);
+		const historyTable = this.$$("historyTable");
+
+		historyTable.sync(ordersData);
 		ordersData.filter();
 	}
 }

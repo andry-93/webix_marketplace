@@ -5,9 +5,8 @@ export const users = new webix.DataCollection({
 			return webix.ajax().post("http://localhost:3000/users", {id, ...item});
 		},
 		update(id, status, item) {
-			return webix.ajax().put(`http://localhost:3000/users/${item._id}`, {id, ...item});
-		},
-		delete: "http://localhost:3000/users"
+			return webix.ajax().put(`http://localhost:3000/users/${id}`, {id, ...item});
+		}
 	}
 	// data: [
 	// 	{

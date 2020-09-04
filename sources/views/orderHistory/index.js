@@ -1,6 +1,7 @@
 import {JetView} from "webix-jet";
 import {ordersData} from "../../models/orders";
 import {catalogData} from "../../models/catalog";
+import {users} from "../../models/users";
 
 import "./style.css";
 
@@ -19,8 +20,10 @@ export default class OrderHistory extends JetView {
 	config() {
 		return {
 			view: "datatable",
+			localId: "historyTable",
 			columns: [
 				{
+					id: "productName",
 					header: [
 						"Product",
 						{
@@ -28,8 +31,7 @@ export default class OrderHistory extends JetView {
 							compare: onTitleFilter
 						}
 					],
-					fillspace: true,
-					template: obj => catalogData.getItem(obj.productId).title
+					fillspace: true
 				},
 				{header: "Amount", id: "amount"},
 				{header: "Address", id: "address", fillspace: true},
@@ -50,13 +52,21 @@ export default class OrderHistory extends JetView {
 
 					return false;
 				}
-			},
-			data: ordersData
+			}
 		};
 	}
 
 	init() {
-		const auth = this.app.getService("user");
-		ordersData.filter("#userId#", auth.user.id);
+		const historyTable = this.$$("historyTable");
+
+		webix.promise.all([
+			catalogData,
+			ordersData,
+			users
+		]).then(() => {
+			historyTable.sync(ordersData);
+			const auth = this.app.getService("user");
+			ordersData.filter("#userId#", auth.user.id);
+		});
 	}
 }
