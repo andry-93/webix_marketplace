@@ -115,6 +115,7 @@ export default class NewProduct extends JetView {
 						price: formData.price,
 						rating: "0"
 					});
+					webix.message("New product added");
 				}
 			});
 		});
