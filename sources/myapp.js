@@ -1,5 +1,7 @@
+import firebase from "firebase/app";
 import {JetApp, EmptyRouter, HashRouter} from "webix-jet";
-import {users} from "./models/users";
+import {firebaseConfig} from "./models/config";
+// import {users} from "./models/users";
 import "./styles/app.css";
 
 export default class MyApp extends JetApp {
@@ -36,6 +38,7 @@ if (!BUILD_AS_MODULE) {
 				// });
 			});
 
+			firebase.initializeApp(firebaseConfig);
 			app.render();
 		}
 	);
